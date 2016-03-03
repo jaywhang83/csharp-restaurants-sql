@@ -81,6 +81,20 @@ namespace BestRestaurant
         selectedCuisine.Delete();
         return View["deleted.cshtml"];
       };
+      Get["/cuisine/search"]= _ =>
+      {
+        return View["search.cshtml"];
+      };
+      Post["/cuisine/search/result"] = _ =>
+      {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        string cuisineName = Request.Form["search-cuisine"];
+        var searchResult = Cuisine.Search(cuisineName);
+        var cuisineRestaurants = searchResult.GetRestaurants();
+        model.Add("cuisine", searchResult);
+        model.Add("restaurants", cuisineRestaurants);
+        return View["search_results.cshtml", model];
+      };
     }
   }
 }

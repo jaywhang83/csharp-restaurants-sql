@@ -68,6 +68,33 @@ namespace BestRestaurant
     }
 
     [Fact]
+    public void Test_Search_SearchAllOfACusinesRestaurants()
+    {
+      string name1 = "Sushi";
+      Cuisine testCuisine1 = new Cuisine(name1);
+      testCuisine1.Save();
+
+      string name2 = "Pho";
+      Cuisine testCuisine2 = new Cuisine(name2);
+      testCuisine2.Save();
+
+      Restaurant testRestaurant1 = new Restaurant("Bamboo", "123 SW 5th ave, Portland Oregon", testCuisine1.GetId());
+      testRestaurant1.Save();
+      Restaurant testRestaurant2 = new Restaurant("Pho Zen", "SW 23rd ave, Portland Oregon", testCuisine2.GetId());
+      testRestaurant2.Save();
+
+      Cuisine foundCuisine = Cuisine.Search(testCuisine1.GetName());
+
+      Assert.Equal(testCuisine1, foundCuisine);
+
+      List<Restaurant> testRestaurantList = new List<Restaurant> {testRestaurant1};
+      List<Restaurant> resultRestaurantList = foundCuisine.GetRestaurants();
+
+      Assert.Equal(testRestaurantList, resultRestaurantList);
+      Assert.Equal(testRestaurantList, resultRestaurantList);
+    }
+
+    [Fact]
     public void Test_GetRestaurants_RetrievesAllRestaurantsWithCuisine()
     {
       Cuisine testCuisine = new Cuisine("Sushi");
@@ -98,6 +125,7 @@ namespace BestRestaurant
 
       Assert.Equal(newCuisine, result);
     }
+
     [Fact]
     public void Test_Delete_DeletesCuisineFromDatabase()
     {

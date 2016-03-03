@@ -119,7 +119,7 @@ namespace BestRestaurant
       cmd.Parameters.Add(newNameParameter);
 
       SqlParameter cuisineIdParameter = new SqlParameter();
-      cuisineIdParameter.ParameterName = "CuisineId";
+      cuisineIdParameter.ParameterName = "@CuisineId";
       cuisineIdParameter.Value = this.GetId();
       cmd.Parameters.Add(cuisineIdParameter);
       rdr = cmd.ExecuteReader();
@@ -201,6 +201,42 @@ namespace BestRestaurant
       }
       return foundCuisine;
     }
+
+    public static Cuisine Search(string name)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM cuisines WHERE name = @CuisineName;", conn);
+      SqlParameter cuisineNameParameter = new SqlParameter();
+      cuisineNameParameter.ParameterName = "@CuisineName";
+      cuisineNameParameter.Value = name;
+      cmd.Parameters.Add(cuisineNameParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundCuisineId = 0;
+      string foundCuisineName = null;
+
+      while(rdr.Read())
+      {
+        foundCuisineId = rdr.GetInt32(0);
+        foundCuisineName = rdr.GetString(1);
+      }
+
+      Cuisine foundCuisine = new Cuisine(foundCuisineName, foundCuisineId);
+
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+      return foundCuisine;
+    }
+
 
     public List<Restaurant> GetRestaurants()
     {
