@@ -67,19 +67,68 @@ namespace BestRestaurant
       Assert.Equal(testCuisine, foundCuisine);
     }
 
-    // [Fact]
-    // public void Test_GetRestaurants_RetrievesAllRestaurantsWithCuisine()
-    // {
-    //   Cuisine testCuisine = new Cuisine("Sushi");
-    //   testCuisine.Save();
-    //
-    //   Restaurant firstRestaurant = new Restaurant("")
-    // }
-    //
+    [Fact]
+    public void Test_GetRestaurants_RetrievesAllRestaurantsWithCuisine()
+    {
+      Cuisine testCuisine = new Cuisine("Sushi");
+      testCuisine.Save();
+
+      Restaurant firstRestaurant = new Restaurant("Bamboo", "123 SW 5th ave, Portland Oregon", testCuisine.GetId());
+      firstRestaurant.Save();
+      Restaurant secondRestaurant = new Restaurant("Mio Sushi", "SW 23rd ave, Portland Oregon", testCuisine.GetId());
+      secondRestaurant.Save();
+
+      List<Restaurant> testRestaurantList = new List<Restaurant> {firstRestaurant, secondRestaurant};
+      List<Restaurant> resultRestaurantList = testCuisine.GetRestaurants();
+
+      Assert.Equal(testRestaurantList, resultRestaurantList);
+    }
+
+    [Fact]
+    public void Test_Update_UpdateCuisineInDatebase()
+    {
+      string name = "Sushi";
+      Cuisine testCuisine = new Cuisine(name);
+      testCuisine.Save();
+      string newCuisine = "Pho";
+
+      testCuisine.Update(newCuisine);
+
+      string result = testCuisine.GetName();
+
+      Assert.Equal(newCuisine, result);
+    }
+    [Fact]
+    public void Test_Delete_DeletesCuisineFromDatabase()
+    {
+      string name1 = "Sushi";
+      Cuisine testCuisine1 = new Cuisine(name1);
+      testCuisine1.Save();
+
+      string name2 = "Pho";
+      Cuisine testCuisine2 = new Cuisine(name2);
+      testCuisine2.Save();
+
+      Restaurant testRestaurant1 = new Restaurant("Bamboo", "123 SW 5th ave, Portland Oregon", testCuisine1.GetId());
+      testRestaurant1.Save();
+      Restaurant testRestaurant2 = new Restaurant("Pho Zen", "SW 23rd ave, Portland Oregon", testCuisine2.GetId());
+      testRestaurant2.Save();
+
+      testCuisine1.Delete();
+      List<Cuisine> resultCuisines = Cuisine.GetAll();
+      List<Cuisine> testCuisineList = new List<Cuisine> {testCuisine2};
+
+      List<Restaurant> resultRestaurants = Restaurant.GetAll();
+      List<Restaurant> testRestaurantList = new List<Restaurant> {testRestaurant2};
+
+      Assert.Equal(testCuisineList, resultCuisines);
+      Assert.Equal(testRestaurantList, resultRestaurants);
+    }
+
     public void Dispose()
     {
       Cuisine.DeleteAll();
-      Restaurant.DeleteAll(); 
+      Restaurant.DeleteAll();
     }
   }
 }
