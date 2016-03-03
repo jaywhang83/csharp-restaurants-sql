@@ -79,6 +79,7 @@ namespace BestRestaurant
     public void Dispose()
     {
       Cuisine.DeleteAll();
+      Restaurant.DeleteAll(); 
     }
   }
 }
