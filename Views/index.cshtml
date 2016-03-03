@@ -1,0 +1,23 @@
+
+<body>
+  <h1>Cuisines:</h1>
+  <hr />
+
+  @if(@Model.Count == 0)
+  {
+    <p>There are no cuisines.</p>
+  }
+  else
+  {
+    <ul>
+      @foreach(var cuisine in Model)
+      {
+        <li><a href="/cuisines/@cuisine.GetId()">@cuisine.GetName()</a></li>
+      }
+    </ul>
+    <form action="/cuisines/delete" method="post">
+      <button type="submit">Delte all cuisines</button>
+    </form>
+  }
+  <h4><a href="/restaurants">View Restaurants</a><h4>
+<body>
